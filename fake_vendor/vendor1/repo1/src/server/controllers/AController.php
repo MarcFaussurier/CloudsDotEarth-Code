@@ -15,14 +15,14 @@ class AController extends \CloudsDotEarth\Code\Controller {
     /**
      * Home controller
      *
-     * @uri /*
+     * @uri /hello
      * @priority 10
      *
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
      * @return bool
      */
-    public function someTest(ServerRequestInterface &$request, ResponseInterface &$response) : bool {
+    public function someTest(ServerRequestInterface &$request, ResponseInterface &$response, array $matches) : bool {
         var_dump("INSIDE METHOD");
         $status = 200;
         $headers = ['X-Foo' => 'Bar'];

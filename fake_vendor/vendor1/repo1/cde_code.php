@@ -6,6 +6,8 @@
  * Time: 5:08 PM
  */
 
+use CloudsDotEarth\Code\Adapters\SwoolePSR;
+
 class SomeBundle extends \CloudsDotEarth\Code\Bundle {
     public function __construct(\CloudsDotEarth\Code\Actions $actions)
     {
@@ -17,16 +19,31 @@ class SomeBundle extends \CloudsDotEarth\Code\Bundle {
 
         var_dump("REGISTRED ON HTTP_REQUEST");
 
-        $this->on("http_request", function(&$result, &$request, &$response) { // arguments may change
+        $this->on("http_request", function(&$request, &$response) { // arguments may change
             echo "FIRING....".PHP_EOL;
             var_dump("INSIDE BUNDLE ON HTTP_REQUEST");
-            var_dump($this->actions);
 
-            $psr_request = (new \Jasny\HttpMessage\ServerRequest())->withGlobalEnvironment();
+            $prefix = \CloudsDotEarth\Code\Controller::ACTION_PREFIX;
+
+            $routesActions = $this->actions->getActionsThatStartWith($prefix);
             $psr_response = new \Jasny\HttpMessage\Response();
-
-            $this->actions->fire("route://", [&$psr_request, &$psr_response]);
-            $result = "HELLO WORLD";
+            $psr_request = SwoolePSR::swooleRequestToPSR($request);
+            $uri = $psr_request->getServerParams()["request_uri"];
+            var_dump($uri);
+            foreach ($routesActions->actions as $k => $v) {
+                $result = [];
+                $currentPattern = trim(substr($k, strlen($prefix), strlen($k)));
+                $escapedUrl = preg_quote($currentPattern, "/");
+                $regex = '/' . $escapedUrl . '/';
+                echo($regex);
+                if (((int) preg_match_all($regex, $uri, $result)) > 0) {
+                    if ($routesActions->fire($k, [&$psr_request, &$psr_response, $result]))
+                        break;
+                } else {
+                    var_dump("NOT FIRED");
+                }
+            }
+            SwoolePSR::swooleResponseFromPSR($response, $psr_response);
             return false;
         });
 

@@ -34,11 +34,11 @@ class ControllerStack extends Stack implements RequestHandlerInterface
             $controller->setMetaData();
             foreach ($controller->methods as $method) {
                 $this->actions->on
-                ("route://",
-                    function(ServerRequestInterface &$request, ResponseInterface &$response) use($method) : bool {
+                (Controller::ACTION_PREFIX . $method["uri"],
+                    function(ServerRequestInterface &$request, ResponseInterface &$response, array $regexResults) use($method) : bool {
                         $controller = $method["controller"];
                         $function = $method["function"];
-                        return $controller->$function($request, $response);
+                        return $controller->$function($request, $response, $regexResults);
                 }, intval($method["priority"]));
             }
         }

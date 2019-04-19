@@ -29,9 +29,7 @@ class Server
         $services->register_ws("websocket", $server);
         $services->register_tcp("tcp", $tcp_server);
         $services->on("http", "request", function (\Swoole\Http\Request $request, \Swoole\Http\Response $response) use($actions) {
-            $result = "";
-            $actions->fire("http_request", [&$result, &$request, &$response]);
-            $response->end($result);
+            $actions->fire("http_request", [&$request, &$response]);
         });
         $services->on("websocket", "message", function (\Swoole\WebSocket\Server $server, \Swoole\WebSocket\Frame $frame) use($actions) {
             $result = "";

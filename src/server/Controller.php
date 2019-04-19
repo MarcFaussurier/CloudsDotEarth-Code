@@ -15,6 +15,8 @@ use Psr\Http\Message\ServerRequestInterface;
  * @package CloudsDotEarth\Bundles\Core
  */
 class Controller {
+    const ACTION_PREFIX = "route://";
+
     /**
      * Format is function name, uri regex, service regex, priority, controller
      * @var array[]
@@ -36,7 +38,7 @@ class Controller {
             // dont proceed useless tokens
             if (in_array($token[0], [
                 T_COMMENT,      // All comments since PHP5
-                T_DOC_COMMENT,   // PHPDoc comments
+                T_DOC_COMMENT,  // PHPDoc comments
                 T_STRING
             ])) {
                 if (($lastComment !== "") && ($token[0] === T_STRING)) {

@@ -1,0 +1,25 @@
+{
+    "name": "marc/swf",
+    "type": "project",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "marc FAUSSURIER",
+            "email": "faussurier.marc@icloud.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.2",
+        "swoole/ide-helper": "@dev",
+        "jasny/http-message": "dev-master",
+        "psr/http-server-middleware": "^1.0@dev",
+        "psr/http-message": "^1.0@dev",
+        "guzzlehttp/guzzle": "^6.3@dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "CloudsDotEarth\\Code\\": "src/server"
+        }
+    }
+}

@@ -15,7 +15,7 @@ class BundleLoader
 
     public function __construct(Actions &$actions) {
         $GLOBALS["BUNDLE_CONTEXT"] = true;
-        $files = glob((self::USE_FAKE_VENDOR ? "vendor" : "fake_vendor") . "/**/*/cde_code.php");
+        $files = glob((self::USE_FAKE_VENDOR ? "fake_vendor" : "vendor") . "/**/*/cde_code.php");
         foreach ($files as $file) {
             $test = require_once $file;
             new $GLOBALS["BUNDLE_CLASS"]($actions);
